@@ -1,6 +1,8 @@
 package com.receiptReader.service;
 
 import com.receiptReader.dto.CheapestPriceDTO;
+import com.receiptReader.dto.PriceComparisonDTO;
+import com.receiptReader.dto.StorePriceDTO;
 import com.receiptReader.model.Price;
 import com.receiptReader.repository.PriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 @Service
 public class PriceService {
@@ -32,6 +35,31 @@ public class PriceService {
                 getCheapestPrice.getPrice(),
                 getCheapestPrice.getStore().getName(),
                 getCheapestPrice.getDate()
+        );
+    }
+
+    public PriceComparisonDTO comparePricesForProduct(Long productId) {
+        List<Price> prices = priceRepository.findByProductId(productId);
+
+        if(prices.isEmpty()) {
+            return null;
+        }
+
+        String productName = prices.get(0).getProduct().getName();
+
+        List<StorePriceDTO> storePrices = prices.stream()
+                .map(price -> new StorePriceDTO(
+                        price.getStore().getName(),
+                        price.getPrice(),
+                        price.getDate()
+                ))
+                .sorted(Comparator.comparing(StorePriceDTO::getPrice))
+                .collect(Collectors.toList());
+
+        return new PriceComparisonDTO(
+                productId,
+                productName,
+                storePrices
         );
     }
 }

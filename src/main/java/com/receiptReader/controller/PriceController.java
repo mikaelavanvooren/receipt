@@ -3,6 +3,7 @@ package com.receiptReader.controller;
 import com.receiptReader.dto.CheapestPriceDTO;
 import com.receiptReader.dto.PriceMapper;
 import com.receiptReader.dto.PriceResponseDTO;
+import com.receiptReader.dto.PriceComparisonDTO;
 import com.receiptReader.model.Price;
 import com.receiptReader.repository.PriceRepository;
 import com.receiptReader.service.PriceService;
@@ -63,5 +64,10 @@ public class PriceController {
     @GetMapping("/cheapest/{productId}")
     public CheapestPriceDTO getCheapestPriceForProduct(@PathVariable Long productId) {
         return priceService.getCheapestPriceForProduct(productId);
+    }
+
+    @GetMapping("/compare/{productId}")
+    public PriceComparisonDTO comparePricesForProduct(@PathVariable Long productId) {
+        return priceService.comparePricesForProduct(productId);
     }
 }
