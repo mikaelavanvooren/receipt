@@ -1,5 +1,7 @@
 package com.receiptReader.controller;
 
+import com.receiptReader.dto.PriceMapper;
+import com.receiptReader.dto.PriceResponseDTO;
 import com.receiptReader.model.Price;
 import com.receiptReader.repository.PriceRepository;
 import jakarta.validation.Valid;
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/prices")
@@ -16,8 +19,11 @@ public class PriceController {
     private PriceRepository priceRepository;
 
     @GetMapping
-    public List<Price> getAllPrices() {
-        return priceRepository.findAll();
+    public List<PriceResponseDTO> getAllPrices() {
+        return priceRepository.findAll()
+                .stream()
+                .map(PriceMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @PostMapping
@@ -26,17 +32,26 @@ public class PriceController {
     }
 
     @GetMapping("/product/{productId}")
-    public List<Price> getPricesByProductId(@PathVariable Long productId) {
-        return priceRepository.findByProductId(productId);
+    public List<PriceResponseDTO> getPricesByProductId(@PathVariable Long productId) {
+        return priceRepository.findByProductId(productId)
+                .stream()
+                .map(PriceMapper::toDTO)
+                .collect(Collectors.toList());
     }   
 
     @GetMapping("/store/{storeId}")
-    public List<Price> getPricesByStoreId(@PathVariable Long storeId) {
-        return priceRepository.findByStoreId(storeId);
+    public List<PriceResponseDTO> getPricesByStoreId(@PathVariable Long storeId) {
+        return priceRepository.findByStoreId(storeId)
+                .stream()
+                .map(PriceMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/product/{productId}/store/{storeId}")
-    public List<Price> getPricesByProductIdAndStoreId(@PathVariable Long productId, @PathVariable Long storeId) {
-        return priceRepository.findByProductIdAndStoreId(productId, storeId);
+    public List<PriceResponseDTO> getPricesByProductIdAndStoreId(@PathVariable Long productId, @PathVariable Long storeId) {
+        return priceRepository.findByProductIdAndStoreId(productId, storeId)
+                .stream()
+                .map(PriceMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }
