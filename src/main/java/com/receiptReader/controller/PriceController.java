@@ -1,9 +1,11 @@
 package com.receiptReader.controller;
 
+import com.receiptReader.dto.CheapestPriceDTO;
 import com.receiptReader.dto.PriceMapper;
 import com.receiptReader.dto.PriceResponseDTO;
 import com.receiptReader.model.Price;
 import com.receiptReader.repository.PriceRepository;
+import com.receiptReader.service.PriceService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ public class PriceController {
 
     @Autowired
     private PriceRepository priceRepository;
+
+    @Autowired
+    private PriceService priceService;
 
     @GetMapping
     public List<PriceResponseDTO> getAllPrices() {
@@ -53,5 +58,10 @@ public class PriceController {
                 .stream()
                 .map(PriceMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/cheapest/{productId}")
+    public CheapestPriceDTO getCheapestPriceForProduct(@PathVariable Long productId) {
+        return priceService.getCheapestPriceForProduct(productId);
     }
 }
