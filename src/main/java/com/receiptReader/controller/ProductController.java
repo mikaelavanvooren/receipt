@@ -2,6 +2,7 @@ package com.receiptReader.controller;
 
 import com.receiptReader.model.Product;
 import com.receiptReader.repository.ProductRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
+    public Product createProduct(@Valid @RequestBody Product product) {
         return productRepository.save(product);
     }
 }

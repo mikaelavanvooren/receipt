@@ -1,5 +1,7 @@
 package com.receiptReader.model;
+
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "products")
@@ -8,7 +10,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Product name is required")
     private String name;
+    
     private String category;
 
     public Product() {}

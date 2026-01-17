@@ -1,6 +1,8 @@
 package com.receiptReader.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -13,13 +15,19 @@ public class Price {
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
+    @NotNull(message = "Product is required")
     private Product product;
 
     @ManyToOne
     @JoinColumn(name = "store_id", nullable = false)
+    @NotNull(message = "Store is required")
     private Store store;
 
+    @NotNull(message = "Price is required")
+    @Positive(message = "Price must be positive")
     private BigDecimal price;
+
+    @NotNull(message = "Date is required")
     private LocalDate date;
 
     public Price() {}

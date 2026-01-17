@@ -2,6 +2,7 @@ package com.receiptReader.controller;
 
 import com.receiptReader.model.Price;
 import com.receiptReader.repository.PriceRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class PriceController {
     }
 
     @PostMapping
-    public Price createPrice(@RequestBody Price price) {
+    public Price createPrice(@Valid @RequestBody Price price) {
         return priceRepository.save(price);
     }
 
