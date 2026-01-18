@@ -3,6 +3,7 @@ package com.receiptReader.service;
 import com.receiptReader.dto.CheapestPriceDTO;
 import com.receiptReader.dto.PriceComparisonDTO;
 import com.receiptReader.dto.StorePriceDTO;
+import com.receiptReader.exception.ResourceNotFoundException;
 import com.receiptReader.model.Price;
 import com.receiptReader.repository.PriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class PriceService {
         List<Price> prices = priceRepository.findByProductId(productId);
 
         if(prices.isEmpty()) {
-            return null;
+            throw new ResourceNotFoundException("No prices found for product with id " + productId);
         }
 
         Price getCheapestPrice = prices.stream()
@@ -42,7 +43,7 @@ public class PriceService {
         List<Price> prices = priceRepository.findByProductId(productId);
 
         if(prices.isEmpty()) {
-            return null;
+            throw new ResourceNotFoundException("No prices found for product with id " + productId);
         }
 
         String productName = prices.get(0).getProduct().getName();

@@ -1,5 +1,6 @@
 package com.receiptReader.controller;
 
+import com.receiptReader.exception.ResourceNotFoundException;
 import com.receiptReader.model.Product;
 import com.receiptReader.repository.ProductRepository;
 import jakarta.validation.Valid;
@@ -23,5 +24,11 @@ public class ProductController {
     @PostMapping
     public Product createProduct(@Valid @RequestBody Product product) {
         return productRepository.save(product);
+    }
+
+    @GetMapping("/{id}")
+    public Product getProductById(@PathVariable Long id) {
+        return productRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));
     }
 }
