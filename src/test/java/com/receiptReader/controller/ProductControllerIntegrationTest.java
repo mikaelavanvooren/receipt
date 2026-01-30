@@ -2,6 +2,7 @@ package com.receiptReader.controller;
 
 import com.receiptReader.model.Product;
 import com.receiptReader.repository.ProductRepository;
+import com.receiptReader.repository.PriceRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,15 @@ public class ProductControllerIntegrationTest {
     @Autowired
     private ProductRepository productRepository;
     
+    @Autowired
+    private PriceRepository priceRepository;
+    
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        priceRepository.deleteAll();
         productRepository.deleteAll();
     }
 
