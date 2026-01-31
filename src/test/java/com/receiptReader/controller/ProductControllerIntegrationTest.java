@@ -62,14 +62,10 @@ public class ProductControllerIntegrationTest {
 
     @Test
     void getAllProducts_shouldReturnListOfProducts() throws Exception {
-        Product product1 = new Product();
-        product1.setName("Eggs");
-        product1.setCategory("Dairy");
+        Product product1 = new Product("Eggs", "Dairy");
         productRepository.save(product1);
 
-        Product product2 = new Product();
-        product2.setName("Apples");
-        product2.setCategory("Fruit");
+        Product product2 = new Product("Apples", "Fruit");
         productRepository.save(product2);
 
         mockMvc.perform(get("/api/products"))
@@ -83,9 +79,7 @@ public class ProductControllerIntegrationTest {
 
     @Test
     void createProductById_shouldReturnProduct() throws Exception {
-        Product product = new Product();
-        product.setName("Bananas");
-        product.setCategory("Fruit");
+        Product product = new Product("Bananas", "Fruit");
         Product savedProduct = productRepository.save(product);
 
         mockMvc.perform(get("/api/products/" + savedProduct.getId()))

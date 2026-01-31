@@ -15,7 +15,11 @@ public class Store {
 
     private String name;
 
-    public Store() {
+    protected Store() {
+    }
+
+    public Store(String name) {
+        this.name = name;
     }
 
     public Long getId() {

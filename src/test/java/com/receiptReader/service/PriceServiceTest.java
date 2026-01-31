@@ -34,17 +34,13 @@ public class PriceServiceTest {
     void findCheapestPrice_shouldReturnLowestPrice_whenMultiplePricesExist() {
         Long productId = 1L;
 
-        Product milk = new Product();
+        Product milk = new Product("Milk", "Dairy");
         milk.setId(productId);
-        milk.setName("Milk");
-        milk.setCategory("Dairy");
 
-        Store walmart = new Store();
-        walmart.setName("Walmart");
+        Store walmart = new Store("Walmart");
         walmart.setId(1L);
 
-        Store target = new Store();
-        target.setName("Target");
+        Store target = new Store("Target");
         target.setId(2L);
 
         Price price1 = new Price(milk, walmart, new BigDecimal("3.99"), LocalDate.now());

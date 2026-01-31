@@ -15,7 +15,8 @@ public class Product {
     
     private String category;
 
-    public Product() {}
+    protected Product() {
+    }
 
     public Product(String name, String category) {
         this.name = name;

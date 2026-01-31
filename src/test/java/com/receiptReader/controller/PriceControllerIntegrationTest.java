@@ -49,17 +49,13 @@ public class PriceControllerIntegrationTest {
 
     @Test
     void getCheapestPrice_shouldReturnLowestPrice_whenMultiplePricesExist() throws Exception {
-        Product milk = new Product();
-        milk.setName("Milk");
-        milk.setCategory("Dairy");
+        Product milk = new Product("Milk", "Dairy");
         productRepository.save(milk);
 
-        Store walmart = new Store();
-        walmart.setName("Walmart");
+        Store walmart = new Store("Walmart");
         storeRepository.save(walmart);
 
-        Store target = new Store();
-        target.setName("Target");
+        Store target = new Store("Target");
         storeRepository.save(target);
 
         Price price1 = new Price(milk, walmart, new BigDecimal("3.99"), LocalDate.now());
@@ -79,9 +75,7 @@ public class PriceControllerIntegrationTest {
 
     @Test
     void getCheapestPrice_shouldReturn404_whenNoPricesExist() throws Exception {
-        Product bread = new Product();
-        bread.setName("Bread");
-        bread.setCategory("Bakery");
+        Product bread = new Product("Bread", "Bakery");
         productRepository.save(bread);
 
         mockMvc.perform(get("/api/prices/cheapest/" + bread.getId()))
@@ -91,17 +85,13 @@ public class PriceControllerIntegrationTest {
 
     @Test
     void comparePrice_shouldReturnSortedPrices_whenMultiplePricesExist() throws Exception {
-        Product eggs = new Product();
-        eggs.setName("Eggs");
-        eggs.setCategory("Dairy");
+        Product eggs = new Product("Eggs", "Dairy");
         productRepository.save(eggs);
 
-        Store kroger = new Store();
-        kroger.setName("Kroger");
+        Store kroger = new Store("Kroger");
         storeRepository.save(kroger);
 
-        Store safeway = new Store();
-        safeway.setName("Safeway");
+        Store safeway = new Store("Safeway");
         storeRepository.save(safeway);
 
         Price price1 = new Price(eggs, kroger, new BigDecimal("2.99"), LocalDate.now());
@@ -120,13 +110,10 @@ public class PriceControllerIntegrationTest {
 
     @Test
     void getAllPrices_shouldReturnPricesWithProductAndStoreDetails() throws Exception {
-        Product apples = new Product();
-        apples.setName("Apples");
-        apples.setCategory("Fruit");
+        Product apples = new Product("Apples", "Fruit");
         productRepository.save(apples);
 
-        Store wholeFoods = new Store();
-        wholeFoods.setName("Whole Foods");
+        Store wholeFoods = new Store("Whole Foods");
         storeRepository.save(wholeFoods);
 
         Price price = new Price(apples, wholeFoods, new BigDecimal("1.99"), LocalDate.now());
