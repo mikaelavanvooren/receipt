@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/prices")
+@RequestMapping("api/v1/prices")
 public class PriceController {
 
     @Autowired
