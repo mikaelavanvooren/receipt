@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Service layer for receipt parsing
+ * Handles the extraction of store names and item details (store, date, price) from raw receipt text
+ */
 @Service
 public class ReceiptParserService {
     private static final Pattern ITEM_PATTERN = Pattern.compile(
@@ -35,6 +39,11 @@ public class ReceiptParserService {
         return "Unknown Store";
     }
 
+    /**
+     * Extracts item names and prices from receipt lines using regex pattern matching
+     * @param lines The lines of text from the receipt
+     * @return A list of ReceiptItemDTOs containing item names and prices
+     */
     private List<ReceiptItemDTO> extractItems(String[] lines) {
         List<ReceiptItemDTO> items = new ArrayList<>();
 

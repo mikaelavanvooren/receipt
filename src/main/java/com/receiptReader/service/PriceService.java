@@ -13,12 +13,25 @@ import java.util.List;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
+
+/**
+ * Service layer for price-related buisness logic
+ * Handles price comparisons, finding cheapest prices, and agregating price data
+ */
 @Service
 public class PriceService {
 
     @Autowired
     private PriceRepository priceRepository;
 
+    /**
+     * Finds the cheapest price for a given product across all stores
+     * Useful for quick "where should I buy this?" queries
+     * 
+     * @param productId The ID of the product to find the cheapest price for
+     * @return A DTO containing the cheapest store name, price, and date
+     * @throws ResourceNotFoundException if no prices are found for the product
+     */
     public CheapestPriceDTO getCheapestPriceForProduct(Long productId) {
         List<Price> prices = priceRepository.findByProductId(productId);
 
@@ -39,6 +52,14 @@ public class PriceService {
         );
     }
 
+    /**
+     * Compares prices for a given product across all stores, sorted cheapest to most expensive
+     * Unlike cheapest price, this returns all prices for the product to give a full comparison
+     * 
+     * @param productId The ID of the product to compare prices for
+     * @return A DTO containing product info and a sorted list of store prices from all stores
+     * @throws ResourceNotFoundException if no prices are found for the product
+     */
     public PriceComparisonDTO comparePricesForProduct(Long productId) {
         List<Price> prices = priceRepository.findByProductId(productId);
 
