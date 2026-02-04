@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: grocery-price-tracker
+    env: docker
+    plan: free
+    healthCheckPath: /api/v1/products
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: grocery-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: grocery-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: grocery-db
+          property: password
+
+databases:
+  - name: grocery-db
+    plan: free
