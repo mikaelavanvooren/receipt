@@ -86,7 +86,7 @@ public class AIReceiptParserService {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         
         if (response.statusCode() != 200) {
-            throw new RuntimeException("OpenAI API error: " + response.body());
+            throw new RuntimeException("OpenAI API returned status " + response.statusCode() + ": " + response.body());
         }
 
         return response.body();
@@ -95,23 +95,55 @@ public class AIReceiptParserService {
     private ParsedReceiptDTO parseAIResponse(String apiResponse) throws Exception {
             JsonNode root = objectMapper.readTree(apiResponse);
 
-            String contentText = root
-                .get("choices")
-                .get(0)
-                .get("message")
-                .get("content")
-                .asText();
+            JsonNode contentNode = root.path("choices").path(0).path("message").path("content");
+            if (contentNode.isMissingNode() || contentNode.isNull()) {
+                throw new Exception("Unexpected OpenAI API response: missing choices[0].message.content");
+            }
+            String contentText = contentNode.asText();
 
             contentText = contentText.replaceAll("```json\\n", "").replaceAll("```\\n", "").trim();
 
             JsonNode receiptData = objectMapper.readTree(contentText);
+            JsonNode receiptData = objectMapper.readTree(contentText);
+
+            if (receiptData == null
+                || !receiptData.hasNonNull("storeName")
+                || !receiptData.has("items")
+                || !receiptData.get("items").isArray()) {
+                throw new RuntimeException("Invalid AI response: missing required fields 'storeName' or 'items'.");
+                JsonNode priceNode = itemNode.get("price");
+                if (priceNode == null || !priceNode.isNumber()) {
+                    throw new IllegalArgumentException("Invalid or missing price for item: " + name);
+                }
+                BigDecimal price = priceNode.decimalValue();
+
             String storeName = receiptData.get("storeName").asText();
 
             List<ReceiptItemDTO> items = new ArrayList<>();
             JsonNode itemsArray = receiptData.get("items");
             for (JsonNode itemNode : itemsArray) {
-                String name = itemNode.get("name").asText();
-                BigDecimal price = new BigDecimal(itemNode.get("price").asText());
+                if (itemNode == null
+                    || !itemNode.hasNonNull("name")
+                    || !itemNode.hasNonNull("price")) {
+                    throw new RuntimeException("Invalid AI response: each item must have non-null 'name' and 'price'.");
+                }
+
+            List<ReceiptItemDTO> items = new ArrayList<>();
+            JsonNode itemsArray = receiptData.path("items");
+            if (!itemsArray.isArray()) {
+                throw new Exception("Parsed receipt JSON has no valid 'items' array");
+            }
+            for (JsonNode itemNode : itemsArray) {
+                JsonNode nameNode = itemNode.path("name");
+                JsonNode priceNode = itemNode.path("price");
+
+                if (nameNode.isMissingNode() || nameNode.isNull() || priceNode.isMissingNode() || priceNode.isNull()) {
+                    throw new Exception("Parsed receipt item is missing 'name' or 'price' field");
+                }
+
+                String name = nameNode.asText();
+                String priceText = priceNode.asText();
+                BigDecimal price = new BigDecimal(priceText);
                 items.add(new ReceiptItemDTO(name, price));
             }
             return new ParsedReceiptDTO(storeName, items);
