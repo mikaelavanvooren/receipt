@@ -18,7 +18,7 @@ I wanted hands-on experience with Spring Boot, PostgreSQL, and Docker, and I wan
 
 - REST API for managing stores, products, and prices
 - Price comparison endpoint to find cheapest store for any product
-- Basic receipt parsing (regex-based, works for simple formats)
+- Designed to support receipt parsing (architected for future AI integration)
 - Input validation with custom error handling
 - Database migrations for schema version control
 - Comprehensive test coverage (unit + integration tests)
@@ -37,22 +37,32 @@ docker-compose up --build
 
 **Find cheapest price for a product:**
 ```bash
-GET /api/prices/cheapest/1
+GET /api/v1/prices/cheapest/1
 ```
 
-**Compare prices across stores:**
+**Compare prices across all stores (sorted cheapest to most expensive):**
 ```bash
-GET /api/prices/compare/1
+GET /api/v1/prices/compare/1
 ```
 
-**Parse a receipt:**
-```bash
-POST /api/receipts/parse
-Content-Type: text/plain
-
-WALMART
-Milk    $3.99
-Bread   $2.49
+Returns:
+```json
+{
+  "productId": 1,
+  "productName": "Milk",
+  "prices": [
+    {
+      "storeName": "Walmart",
+      "price": 3.50,
+      "date": "2026-01-18"
+    },
+    {
+      "storeName": "Target",
+      "price": 4.29,
+      "date": "2026-01-18"
+    }
+  ]
+}
 ```
 
 ## What I Learned
