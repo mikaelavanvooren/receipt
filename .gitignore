@@ -39,3 +39,6 @@ logs/
 *.tmp
 *.bak
 *.class
+
+# Environment variables
+.env

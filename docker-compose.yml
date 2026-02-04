@@ -27,5 +27,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/grocerydb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    env_file:
+      - .env
 volumes:
   postgres-data:
