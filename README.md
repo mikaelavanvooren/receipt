@@ -1,5 +1,7 @@
 # Grocery Price Tracker
 
+**[Live Demo](https://grocery-price-tracker-d9e8.onrender.com)**
+
 A Spring Boot REST API for tracking and comparing grocery prices across different stores. Built to solve a real problem I have - I shop at multiple stores and wanted an easy way to see where items are cheapest.
 
 ## Why I Built This
