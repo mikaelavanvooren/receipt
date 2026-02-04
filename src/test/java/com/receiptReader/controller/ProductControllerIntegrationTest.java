@@ -41,7 +41,7 @@ public class ProductControllerIntegrationTest {
 
     @Test
     void getAllProducts_shouldReturnEmptyList_whenNoProducts() throws Exception {
-        mockMvc.perform(get("/api/products"))
+        mockMvc.perform(get("/api/v1/products"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -50,7 +50,7 @@ public class ProductControllerIntegrationTest {
     void createProduct_shouldReturnCreatedProduct() throws Exception {
         String productJson = "{\"name\":\"Bread\",\"category\":\"Bakery\"}";
 
-        mockMvc.perform(post("/api/products")
+        mockMvc.perform(post("/api/v1/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(productJson))
                 .andExpect(status().isOk())
@@ -68,7 +68,7 @@ public class ProductControllerIntegrationTest {
         Product product2 = new Product("Apples", "Fruit");
         productRepository.save(product2);
 
-        mockMvc.perform(get("/api/products"))
+        mockMvc.perform(get("/api/v1/products"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("Eggs"))
                 .andExpect(jsonPath("$[0].category").value("Dairy"))
@@ -82,7 +82,7 @@ public class ProductControllerIntegrationTest {
         Product product = new Product("Bananas", "Fruit");
         Product savedProduct = productRepository.save(product);
 
-        mockMvc.perform(get("/api/products/" + savedProduct.getId()))
+        mockMvc.perform(get("/api/v1/products/" + savedProduct.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Bananas"))
                 .andExpect(jsonPath("$.category").value("Fruit"));
@@ -90,7 +90,7 @@ public class ProductControllerIntegrationTest {
 
     @Test 
     void getProductById_shouldReturn404_whenProductNotFound() throws Exception {
-        mockMvc.perform(get("/api/products/999"))
+        mockMvc.perform(get("/api/v1/products/999"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.message").value("Product with ID 999 not found"));
@@ -100,7 +100,7 @@ public class ProductControllerIntegrationTest {
     void createProduct_shouldReturn400_whenInvalidInput() throws Exception {
         String productJson = "{\"name\":\"\",\"category\":\"\"}";
 
-        mockMvc.perform(post("/api/products")
+        mockMvc.perform(post("/api/v1/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(productJson))
                 .andExpect(status().isBadRequest())

@@ -65,7 +65,7 @@ public class PriceControllerIntegrationTest {
         priceRepository.save(price2);
         priceRepository.save(price3);
 
-        mockMvc.perform(get("/api/prices/cheapest/" + milk.getId()))
+        mockMvc.perform(get("/api/v1/prices/cheapest/" + milk.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.productId").value(milk.getId()))
                 .andExpect(jsonPath("$.productName").value("Milk"))
@@ -78,7 +78,7 @@ public class PriceControllerIntegrationTest {
         Product bread = new Product("Bread", "Bakery");
         productRepository.save(bread);
 
-        mockMvc.perform(get("/api/prices/cheapest/" + bread.getId()))
+        mockMvc.perform(get("/api/v1/prices/cheapest/" + bread.getId()))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("No prices found for product with id " + bread.getId()));
     }
@@ -99,7 +99,7 @@ public class PriceControllerIntegrationTest {
         priceRepository.save(price1);
         priceRepository.save(price2);
 
-        mockMvc.perform(get("/api/prices/compare/" + eggs.getId()))
+        mockMvc.perform(get("/api/v1/prices/compare/" + eggs.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.prices", hasSize(2)))
                 .andExpect(jsonPath("$.prices[0].storeName").value("Kroger"))
@@ -119,7 +119,7 @@ public class PriceControllerIntegrationTest {
         Price price = new Price(apples, wholeFoods, new BigDecimal("1.99"), LocalDate.now());
         priceRepository.save(price);
 
-        mockMvc.perform(get("/api/prices"))
+        mockMvc.perform(get("/api/v1/prices"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].productName").value("Apples"))
